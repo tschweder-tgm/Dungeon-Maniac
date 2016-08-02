@@ -593,6 +593,13 @@ class Fruit(Item):
          self.picture = PygView.APPLE
          #self.hitpoints = 1
          
+class Fary(Item):
+     def __init__(self, x, y):
+         """a fary is on the ground"""
+         Item.__init__(self, x, y)
+         self.picture = PygView.FARYICON
+         #self.hitpoints = 1
+         
 
 class Key(Item):
     def __init__(self, x, y, color="dull"):
@@ -650,6 +657,7 @@ class Level(object):
         "B": "Boss",
         "S": "Statue",
         "L": "loot",
+        "F": "farys",
         "a": "Apple",
         "k": "key"
     }
@@ -746,6 +754,7 @@ class Level(object):
         self.traps = []
         self.doors = []
         self.fruits = []
+        self.farys = []
         self.loot = []
         self.keys = []
         self.width = 0
@@ -772,7 +781,9 @@ class Level(object):
                 elif char == "L":
                     self.loot.append(Loot(x, y))        # object on top of Floor()
                 elif char == "k":
-                    self.keys.append(Key(x, y))         # object on top of Floor()
+                    self.keys.append(Key(x, y)) 
+                elif char == "F":
+                    self.farys.append(Fary(x, y))         # object on top of Floor()
                 elif char == "<":
                     self.layout[(x, y)] = Stair("up")     # overwrite Floor() with Stair()
                 elif char == ">":
@@ -797,6 +808,7 @@ class Level(object):
         self.monsters = [m for m in self.monsters if m.hitpoints > 0]
         self.traps = [t for t in self.traps if t.hitpoints > 0]
         self.fruits = [f for f in self.fruits if f.hitpoints >0]
+        self.farys = [f for f in self.farys if f.hitpoints >0]
         self.keys = [k for k in self.keys if not k.carried]
         self.loot = [i for i in self.loot if not i.carried]
         self.doors = [d for d in self.doors if d.closed]  # opened doors disappear
@@ -920,7 +932,11 @@ class PygView(object):
         # ------- portraits -----
         PygView.TRADER = pygame.image.load(os.path.join("images", "hakim.png"))
         PygView.DRUID = pygame.image.load(os.path.join("images", "druid.png"))
+        PygView.FARY = pygame.image.load(os.path.join("images", "sylph.png"))
+        PygView.FARYICON = pygame.image.load(os.path.join("images", "Fary.png"))
+        PygView.APPELGHOST = pygame.image.load(os.path.join("images", "myrmidon.png"))
         PygView.GAMEOVER = pygame.image.load(os.path.join("images", "gameover.jpg"))
+        PygView.GAMEOVEREAT = pygame.image.load(os.path.join("images", "Gameover eat.jpg"))
         # --------- create player instance --------------
         self.player = Player(x, y, xp, level, hp)
         # ---- ask player to enter his name --------
@@ -1015,6 +1031,8 @@ class PygView(object):
                     self.background.blit(loot.picture, (x * 32, y * 32))
                 for fruit in [f for f in self.level.fruits if f.x == x and f.y == y and f.hitpoints >0]:
                     self.background.blit(fruit.picture, (x* 32, y * 32))
+                for fary in [f for f in self.level.farys if f.x == x and f.y == y and f.hitpoints >0]:
+                    self.background.blit(fary.picture, (x* 32, y * 32))
                 for key in [k for k in self.level.keys if k.x == x and k.y == y and not k.carried]:
                     self.background.blit(key.picture, (x * 32, y * 32))
         # Scrolling: paint the player in the middle of the screen # TODO: improve gui layout
@@ -1122,6 +1140,43 @@ class PygView(object):
                         # ----- zoom in minimap
                         self.mapzoom += 1
                         continue  # do not move monsters etc., wait for next keyboard command
+                    elif event.key == pygame.K_6:
+                        while True:
+                            antwort = input("Input: ")
+                            if antwort.lower() == "health":
+                                self.player.hitpoints = 100
+                                print("Healthed")
+                                Flytext(self.player.x, self.player.y, "Healthed")
+                            elif antwort.lower() == "feed":
+                                self.player.hunger = 0
+                                print("Feeded")
+                                Flytext(self.player.x, self.player.y, "Feeded")
+                            elif antwort.lower() == "xp":
+                                self.player.xp += 100
+                                print("Players XP: " + str(self.player.xp))
+                                self.player.check_levelup()
+                            elif antwort.lower() == "nodmg":
+                                self.player.damaged = False
+                                print("Players Damaged: " + str(self.player.damaged))
+                            elif antwort.lower() == "buffs":
+                                self.player.dexterity += 100
+                                print("Players Dexterity " + str(self.player.dexterity))
+                                self.player.intelligence += 100
+                                print("Players Intelligence " + str(self.player.intelligence))
+                            elif antwort.lower() == "addkill":
+                                self.player.kills += 1
+                                print("Players Kills: " + str(self.player.kills))
+                            elif antwort.lower() == "mana":
+                                self.player.mana += 100
+                                print("Players Mana: " + str(self.player.mana))
+                            elif antwort.lower() == "strength":
+                                self.player.strength += 100
+                                print("Players Strenght " + str(self.player.strength))
+                            elif antwort.lower() == "exit":
+                                print("Exiting Cheat Menu")
+                                break
+                            else:
+                                print("Cant find command")
                     elif event.key == pygame.K_MINUS:
                         # ----- zoom out minimap
                         self.mapzoom -= 1
@@ -1288,13 +1343,25 @@ class PygView(object):
                         if fruit.x == self.player.x and fruit.y == self.player.y:
                             #key.carried = True
                             #self.player.keys.append(key)
-                            fruit.hitpoints = 0
+                            fruits.hitpoints = 0
                             self.status.append("{} you crunch an apple ".format(self.turns))
                             Flytext(self.player.x, self.player.y, "magic apple", (0, 200, 128))
                             lines = ["i am the apple-ghost",
                                      "thanks for releasing me",
                                      ]
-                            display_textlines(lines, self.screen, (0, 255, 255), PygView.DRUID)
+                            display_textlines(lines, self.screen, (0, 255, 255), PygView.APPELGHOST)
+                    # --------- is there a fary -------
+                    for fary in self.level.farys:
+                        if fary.x == self.player.x and fary.y == self.player.y:
+                            #key.carried = True
+                            #self.player.keys.append(key)
+                            fary.hitpoints = 0
+                            self.status.append("{} you found a Fary ".format(self.turns))
+                            Flytext(self.player.x, self.player.y, "you found a Fary", (0, 200, 128))
+                            lines = ["i am a Fary",
+                                     "i whas attacket by the Wolfs",
+                                     ]
+                            display_textlines(lines, self.screen, (0, 255, 255), PygView.FARY)
                     # --------- is there a trap ? --------------
                     # ---- detect traps around player
                     dirs = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
@@ -1390,7 +1457,11 @@ class PygView(object):
         lines.append("------------ You killed: ------------")
         for v in self.player.killdict:
             lines.append("{} {}".format(self.player.killdict[v], v))
-        display_textlines(lines, self.screen,  (255, 255, 255), PygView.GAMEOVER)
+        if self.player.hunger > 99:
+            display_textlines(lines, self.screen,  (255, 255, 255), PygView.GAMEOVEREAT)
+        else:
+            
+            display_textlines(lines, self.screen,  (255, 255, 255), PygView.GAMEOVER)
         # ------------ game over -----------------
         pygame.mixer.music.stop()
         for line in lines:
@@ -1401,7 +1472,7 @@ class PygView(object):
 
 if __name__ == '__main__':
     # add your own level files here. use os.path.join() for other folders
-    sourcefilenames = ["level001.txt", "level002.txt"]
+    sourcefilenames = ["level001.txt", "level002.txt", "level003.txt"]
     levels = Level.check_levels(sourcefilenames)         # testing level for design errors
     # 800 x 600 pixel, Player start at x=1, y=1, in level 0 (the first level) with 0 xp, has level 1 and 50 hit points
     PygView(levels, 800, 600, 1, 1, 0, 1, 50).run()
