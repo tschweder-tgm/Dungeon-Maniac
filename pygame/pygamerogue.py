@@ -386,13 +386,13 @@ class Statue(Monster):
         return 0, 0  # statue is immobile and will never attack player, only defend it self
 
 
-class Goblin(Monster):
+class ICEDRAGON(Monster):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
         """example of a weak monster"""
         Monster.__init__(self, x, y, xp, level, hp, picture)
         # ------- put your own code here: ----
         # self.picture = random.choice((PygView.GOBLIN1, PygView.GOBLIN2, PygView.GOBLIN3))
-        self.picture = PygView.GOBLIN1
+        self.picture = PygView.ICEDRAGON1
         self.strength = random.randint(3, 9)
         self.hitpoints = random.randint(20, 25)
         self.hpmax = self.hitpoints 
@@ -457,7 +457,7 @@ class Player(Monster):
             self.hitpoints = hp
         self.hpmax = self.hitpoints
         if picture == "":
-            self.picture = PygView.PLAYERPICTURE
+            self.picture = PygView.PLAYER1
         else:
             self.picture = picture
 
@@ -535,18 +535,18 @@ class Block(object):
 class Floor(Block):
     def __init__(self):
         Block.__init__(self)
-        self.picture = random.choice((PygView.FLOOR, PygView.FLOOR1))
+        self.picture = random.choice((PygView.FLOORB1, PygView.FLOORB2))
 
 
 class Wall(Block):
     def __init__(self):
         Block.__init__(self)
-        self.picture = random.choice((PygView.WALL, PygView.WALL1, PygView.WALL2))
+        self.picture = random.choice((PygView.WALLB1, PygView.WALLB2, PygView.WALLB3, PygView.WALLB4))
         
-class Wall2(Wall):
-    def __init__(self):
-        Block.__init__(self)
-        self.picture = PygView.VOIDWALL1
+#class Wall2(Wall):
+#    def __init__(self):
+#        Block.__init__(self)
+#        self.picture = PygView.WALL
 
 
 class Stair(Block):
@@ -673,7 +673,8 @@ class Level(object):
         "L": "loot",
         "a": "Apple",
         "k": "key",
-        "V": "wall2"
+        "ï": "wall"
+#        "V": "wall2"
     }
 
     @staticmethod
@@ -779,7 +780,7 @@ class Level(object):
                 # if not overwritten later by a Wall() object etc., each tile is a Floor()
                 self.layout[(x, y)] = Floor()
                 if char == "M":
-                    self.monsters.append(random.choice([Goblin(x, y), Wolf(x, y)]))  # insert your own Monsters here
+                    self.monsters.append(random.choice([ICEDRAGON(x, y), Wolf(x, y)]))  # insert your own Monsters here
                 elif char == "B":
                     # insert your own boss monsters here
                     self.monsters.append(random.choice([EliteWarrior(x, y), Golem(x, y)]))
@@ -805,8 +806,8 @@ class Level(object):
                     self.signs.append(Sign(x, y, char))   # the char is the key of self.signsdict
                 elif char == "#":
                     self.layout[(x, y)] = Wall()           # overwrite Wall() instead of Floor()
-                elif char == "V":
-                    self.layout[(x, y)] = Wall2() 
+#                elif char == "V":
+#                    self.layout[(x, y)] = Wall2() 
                 x += 1
             y += 1
             self.width = max(self.width, x)
@@ -958,7 +959,7 @@ class PygView(object):
         PygView.GUI = Spritesheet("gui.png")        # 32 x 17
         PygView.FEAT = Spritesheet("feat-keanu.png")      # 32 x 16
         PygView.MAIN = Spritesheet("main-keanu.png")      # 32 x 29
-        PygView.VOIDALTAR = Spritesheet("VoidAltar.png")
+        #PygView.VOIDALTAR = Spritesheet("VoidAltar.png")
         # ------ get a single picture using image_at(x upperleft corner, y upperleft corner, width, height)
         PygView.WALL = PygView.WALLS.image_at((0, 0, 34, 32))  
         PygView.WALL1 = PygView.WALLS.image_at((34, 0, 32, 32))
@@ -992,7 +993,17 @@ class PygView(object):
         PygView.FIREBALL3 = pygame.image.load(os.path.join("images", "FireBall3.png"))
         PygView.FIREBALL4 = pygame.image.load(os.path.join("images", "FireBall4.png"))
         # ---------- simple walls ----------
-        PygView.VOIDWALL1 = pygame.image.load(os.path.join("images", "VoidWall1.png"))
+        PygView.WALLB1 = pygame.image.load(os.path.join("images", "WALLBLUE1.png"))
+        PygView.WALLB2 = pygame.image.load(os.path.join("images", "WALLBLUE2.png"))
+        PygView.WALLB3 = pygame.image.load(os.path.join("images", "WALLBLUE3.png"))
+        PygView.WALLB4 = pygame.image.load(os.path.join("images", "WALLBLUE4.png"))
+        # ---------- simple floors ----------
+        PygView.FLOORB1 = pygame.image.load(os.path.join("images", "FLOOR1.png"))
+        PygView.FLOORB2 = pygame.image.load(os.path.join("images", "FLOOR2.png"))
+        # ---------- simple player ----------
+        PygView.PLAYER1 = pygame.image.load(os.path.join("images", "player1.png"))
+        PygView.ICEDRAGON1 = pygame.image.load(os.path.join("images", "ICEDRAGON.png"))
+        
         # --------- create player instance --------------
         self.player = Player(x, y, xp, level, hp)
         # ---- ask player to enter his name --------
@@ -1053,9 +1064,9 @@ class PygView(object):
                 if char == "#":  # wall
                     pygame.draw.rect(self.map, (150, 150, 150), (x * self.mapzoom + scrollx, y * self.mapzoom + scrolly,
                                      self.mapzoom, self.mapzoom))
-                elif char == "V":  # wall
-                      pygame.draw.rect(self.map, (150, 150, 150), (x * self.mapzoom + scrollx, y * self.mapzoom + scrolly,
-                                       self.mapzoom, self.mapzoom))
+#                elif char == "V":  # wall
+#                      pygame.draw.rect(self.map, (150, 150, 150), (x * self.mapzoom + scrollx, y * self.mapzoom + scrolly,
+#                                       self.mapzoom, self.mapzoom))
                 elif char == "<":  # stair up
                     pygame.draw.rect(self.map, (255, 150, 150), (x * self.mapzoom + scrollx, y * self.mapzoom + scrolly,
                                      self.mapzoom, self.mapzoom))
@@ -1347,7 +1358,7 @@ class PygView(object):
                         self.player.dx, self.player.dy = 0, 0
                         self.count_monsters()
                     # ----- testing if player runs into wall
-                    elif type(whereto).__name__ == "Wall" or type(whereto).__name__ == "Wall2":         # in die Wand gelaufen?
+                    elif type(whereto).__name__ == "Wall": # or type(whereto).__name__ == "Wall2":         # in die Wand gelaufen?
                         self.status.append("{}: Please don't run into walls!".format(self.turns))
                         self.player.hitpoints -= 1
                         self.player.damaged = True
@@ -1512,15 +1523,15 @@ class PygView(object):
                         continue  # monster should not run into door. waiting instead
                     monster.x += dx
                     monster.y += dy
-                    whereto = self.level.layout[(x+dx, y+dy)]
-                    if type(whereto).__name__ == "WallVOIDALTAR":
-                        continue     # monster should not run into wall. waiting instead
-                    if len([t for t in self.level.traps if t.x == x + dx and t.y == y + dy]) > 0:
-                        continue     # monster should not run into trap. waiting instead
-                    if len([d for d in self.level.doors if d.x == x + dx and d.y == y + dy]) > 0:
-                        continue  # monster should not run into door. waiting instead
-                    monster.x += dx
-                    monster.y += dy
+#                    whereto = self.level.layout[(x+dx, y+dy)]
+#                    if type(whereto).__name__ == "WallVOIDALTAR":
+#                        continue     # monster should not run into wall. waiting instead
+#                    if len([t for t in self.level.traps if t.x == x + dx and t.y == y + dy]) > 0:
+#                        continue     # monster should not run into trap. waiting instead
+#                    if len([d for d in self.level.doors if d.x == x + dx and d.y == y + dy]) > 0:
+#                        continue  # monster should not run into door. waiting instead
+#                    monster.x += dx
+#                    monster.y += dy
             # pressedkeys = pygame.key.get_pressed()
             # if pygame.K_x in pressedkeys:
             #      print("x key is pressed")
