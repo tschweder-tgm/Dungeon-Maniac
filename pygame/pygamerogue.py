@@ -400,20 +400,19 @@ class ICEDRAGON(Monster):
         # self.inventory["goblin amulet"] = 1
 
 
-class Wolf(Monster):
+class ICEWOLF(Monster):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
         """another weak monster"""
         Monster.__init__(self, x, y, xp, level, hp, picture)
         # ------- put your own code here: ----
         # self.picture = random.choice((PygView.WOLF1, PygView.WOLF2, PygView.WOLF3))
-        self.picture = PygView.WOLF1
+        self.picture = PygView.ICEWOLF
         self.strength = random.randint(3, 4)
         self.hitpoints = random.randint(15, 20)
         self.hpmax = self.hitpoints 
         # self.dexterity = random.randint(5,8)
         # a wolf can not have shield, armor etc
         self.inventory = {"fangs": 1}  # overwriting inventory from Monster, a wolf can not have other weapons
-
 
 class EliteWarrior(Boss):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
@@ -428,7 +427,6 @@ class EliteWarrior(Boss):
         self.inventory["sword"] = 1             # 100% chance to start with good equipment
         # self.inventory["shield"] = 1
 
-
 class Golem(Boss):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
         """example for a boss monster"""
@@ -437,6 +435,13 @@ class Golem(Boss):
         # self.picture = random.choice((PygView.GOLEM1, PygView.GOLEM2, PygView.GOLEM3))
         # self.strength = random.randint(20,30)   # overwrite Monster() strength
 
+class Trader(Monster):
+    def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
+        Monster.__init__(self, x, y, xp, level, hp, picture)
+        self.rank = "Villager"
+        self.name = random.choice("Gustav", "Herrmann", "Herberd", "Olivia", "Jesse", "Kevin")
+        self.z = 0
+        self.picture = PygView.VILLAGER
 
 class Player(Monster):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
@@ -640,6 +645,16 @@ class Loot(Item):
                                        "healing potion", "shield", "bread"])
         else:
             self.text = descr
+            
+class Coin(Loot):
+    def __init__(self, x, y, descr=""):
+        Item.__init__(self, x, y)
+        if descr == "":
+            self.text = random.choice(["coin"])
+            self.picture = PygView.COIN
+        
+        else:
+            self.text = descr
 
 
 class Error(Exception):
@@ -671,10 +686,11 @@ class Level(object):
         "B": "Boss",
         "S": "Statue",
         "L": "loot",
+        "$": "coin",
         "a": "Apple",
         "k": "key",
-        "ï": "wall"
-#        "V": "wall2"
+        "ï": "wall",
+        "V": "Trader"
     }
 
     @staticmethod
@@ -770,6 +786,7 @@ class Level(object):
         self.doors = []
         self.fruits = []
         self.loot = []
+        self.coin = []
         self.keys = []
         self.width = 0
         self.depth = 0
@@ -780,7 +797,7 @@ class Level(object):
                 # if not overwritten later by a Wall() object etc., each tile is a Floor()
                 self.layout[(x, y)] = Floor()
                 if char == "M":
-                    self.monsters.append(random.choice([ICEDRAGON(x, y), Wolf(x, y)]))  # insert your own Monsters here
+                    self.monsters.append(random.choice([ICEDRAGON(x, y), ICEWOLF(x, y)]))  # insert your own Monsters here
                 elif char == "B":
                     # insert your own boss monsters here
                     self.monsters.append(random.choice([EliteWarrior(x, y), Golem(x, y)]))
@@ -794,6 +811,8 @@ class Level(object):
                     self.fruits.append(Fruit(x,y))     # object on top of Floor()
                 elif char == "L":
                     self.loot.append(Loot(x, y))        # object on top of Floor()
+                elif char == "$":
+                    self.loot.append(Coin(x, y))
                 elif char == "k":
                     self.keys.append(Key(x, y))         # object on top of Floor()
                 elif char == "<":
@@ -826,6 +845,7 @@ class Level(object):
         self.fruits = [f for f in self.fruits if f.hitpoints >0]
         self.keys = [k for k in self.keys if not k.carried]
         self.loot = [i for i in self.loot if not i.carried]
+        self.coin = [c for c in self.coin if not c.carried]
         self.doors = [d for d in self.doors if d.closed]  # opened doors disappear
         #print("fruits:", len(self.fruits))
 
@@ -1003,7 +1023,8 @@ class PygView(object):
         # ---------- simple player ----------
         PygView.PLAYER1 = pygame.image.load(os.path.join("images", "player1.png"))
         PygView.ICEDRAGON1 = pygame.image.load(os.path.join("images", "ICEDRAGON.png"))
-        
+        PygView.ICEWOLF = pygame.image.load(os.path.join("images", "Wolf.png"))
+        PygView.VILLAGER1 = pygame.image.load(os.path.join("images", "Villager.png"))
         # --------- create player instance --------------
         self.player = Player(x, y, xp, level, hp)
         # ---- ask player to enter his name --------
@@ -1034,7 +1055,7 @@ class PygView(object):
         PygView.bowsound = load_sound("bow.ogg")
         PygView.macesound = load_sound("mace.wav")
         load_music("the_king_is_dead.ogg")  # music loop
-        # pygame.mixer.music.play()  # start background music
+        pygame.mixer.music.play()  # start background music
         # pygame.mixer.music.stop()
         # pygame.mixer.music.pause()
         # pygame.mixer.music.unpause()
@@ -1101,6 +1122,8 @@ class PygView(object):
                     self.background.blit(door.picture, (x * 32, y * 32))
                 for loot in [l for l in self.level.loot if l.x == x and l.y == y and not l.carried]:
                     self.background.blit(loot.picture, (x * 32, y * 32))
+                for coin in [c for c in self.level.coin if c.x == x and c.y == y and not c.carried]:
+                    self.background.blit(coin.picture, (x * 32, y * 32))
                 for fruit in [f for f in self.level.fruits if f.x == x and f.y == y and f.hitpoints >0]:
                     self.background.blit(fruit.picture, (x* 32, y * 32))
                 for key in [k for k in self.level.keys if k.x == x and k.y == y and not k.carried]:
