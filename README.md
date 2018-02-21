@@ -1,10 +1,10 @@
-##Dungeon-Maniac
+## Dungeon-Maniac
 
-###Licenses
+### Licenses
 all source code: GPL 3.0 License
 see <http://www.gnu.org/licenses/gpl-3.0.de.html>
 
-###About the Game
+### About the Game
 Forked game from<https://github.com/horstjens/pyrogue>
 <br>
 Our goal is to extend the open-source project HortJens made with our own ideas
@@ -19,7 +19,7 @@ mechanics, but we thought about adding something of our own.
 
 ### Implemented Core Functionality
 
-#####Implemented by HorstJens(PyRogue Root-game)
+##### Implemented by HorstJens(PyRogue Root-game)
 * Grid-based running and WASD/Arrow-Key movement
 * Enemies,Enemy-AI and Combat
 * Item Pick-up
@@ -27,11 +27,11 @@ mechanics, but we thought about adding something of our own.
 * Stairs to advance the floors
 * Level and Stat-system
 
-#####Implemented by Us
+##### Implemented by Us
 
 * Nothing yet
 
-####To be added
+#### To be added
 * KI-generated Item, Enemy, Stair and Wall spawns
 * Interactive character-portrait (Backpack, Armor, Weapons etc.)
 * Item-Variety (Different Weapon-and Armor types)
