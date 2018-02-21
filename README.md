@@ -7,7 +7,7 @@ see <http://www.gnu.org/licenses/gpl-3.0.de.html>
 ### About the Game
 Forked game from<https://github.com/horstjens/pyrogue>
 <br>
-Our goal is to extend the open-source project HortJens made with our own ideas
+Our goal is to extend the open-source project HorstJens made with our own ideas
 and learn how to work with an open-source project in Python.
 
 It is a roguelike-game inspired by different Dungeon Crawler games and most notably
