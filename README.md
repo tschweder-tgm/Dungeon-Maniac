@@ -5,16 +5,16 @@ all source code: GPL 3.0 License
 see <http://www.gnu.org/licenses/gpl-3.0.de.html>
 
 ### About the Game
-Forked game from<https://github.com/horstjens/pyrogue>
+Forked game from <https://github.com/horstjens/pyrogue>
 <br>
-Our goal is to extend the open-source project HorstJens made with our own ideas
-and learn how to work with an open-source project in Python.
+Our goal is to extend the open-source project made by HorstJens with our own ideas
+and learn how to work on an open-source project in Python.
 
-It is a roguelike-game inspired by different Dungeon Crawler games and most notably
+It is a Roguelike-game inspired by different Dungeon Crawler games and most notably
 the name-giving game Rogue from the 1980s
 
-While the game is already pretty substantial with its core gameplay 
-mechanics, but we thought about adding something of our own.
+While the game already has pretty well developed core gameplay 
+mechanics, we still wanted to add something of our own.
 
 
 ### Implemented Core Functionality
@@ -32,7 +32,7 @@ mechanics, but we thought about adding something of our own.
 * Nothing yet
 
 #### To be added
-* KI-generated Item, Enemy, Stair and Wall spawns
+* AI-generated Item, Enemy, Stair and Wall spawns
 * Interactive character-portrait (Backpack, Armor, Weapons etc.)
 * Item-Variety (Different Weapon-and Armor types)
 * Startmenu with Character selection and saves
