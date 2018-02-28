@@ -915,7 +915,7 @@ class Flytext(pygame.sprite.Sprite):
 
 
 class FlyImage(pygame.sprite.Sprite):
-<<<<<<< HEAD
+
     def __init__(self, start_x, start_y, target_x, target_y, image, duration=1, acceleration_factor = 1.00):
         """an image  flying toward a target"""
         self._layer = 7  # order of sprite layers (before / behind other sprites)
@@ -925,7 +925,7 @@ class FlyImage(pygame.sprite.Sprite):
         self.x, self.y = PygView.scrollx + start_x * 32, PygView.scrolly + start_y * 32 + 16
         self.tx, self.ty = PygView.scrollx + target_x * 32, PygView.scrolly + target_y * 32 + 16
         self.duration = duration  # duration of flight in seconds
-=======
+
     def __init__(self, start_x, start_y, target_x, target_y, image1, image2, image3, image4, duration=1, acceleration_factor = 1.00):
         """an image  flying toward a target"""
         self._layer = 7  # order of sprite layers (before / behind other sprites)
@@ -936,7 +936,7 @@ class FlyImage(pygame.sprite.Sprite):
         self.x, self.y = PygView.scrollx + start_x * 32, PygView.scrolly + start_y * 32 + 16
         self.tx, self.ty = PygView.scrollx + target_x * 32, PygView.scrolly + target_y * 32 + 16
         self.duration = duration  # duration of flight in seconds 
->>>>>>> d870c9bf0f98f39845e5248fad4433111b9e181b
+
         self.acc = acceleration_factor  # if < 1, Text moves slower. if > 1, text moves faster. 
         self.dx = (self.tx - self.x) / self.duration
         self.dy = (self.ty - self.y) / self.duration
@@ -1244,12 +1244,12 @@ class PygView(object):
                         txt = []
                         target_x, target_y = get_mousetile()
                         targetmonster = self.level.is_monster(get_mousetile()[0], get_mousetile()[1])
-<<<<<<< HEAD
+
                         FlyImage(self.player.x, self.player.y, get_mousetile()[0], get_mousetile()[1], image=PygView.APPLE)
                         
-=======
+
                         FlyImage(self.player.x, self.player.y, get_mousetile()[0], get_mousetile()[1], image1=PygView.FIREBALL1, image2=PygView.FIREBALL2, image3=PygView.FIREBALL3, image4=PygView.FIREBALL4)
->>>>>>> d870c9bf0f98f39845e5248fad4433111b9e181b
+
                         # ------------ magic distance combat -------------
                         if not targetmonster:
                             txt.append("magic spell wasted")
@@ -1563,8 +1563,7 @@ class PygView(object):
                         continue  # monster should not run into door. waiting instead
                     monster.x += dx
                     monster.y += dy
-<<<<<<< HEAD
-=======
+
 #                    whereto = self.level.layout[(x+dx, y+dy)]
 #                    if type(whereto).__name__ == "WallVOIDALTAR":
 #                        continue     # monster should not run into wall. waiting instead
@@ -1574,7 +1573,7 @@ class PygView(object):
 #                        continue  # monster should not run into door. waiting instead
 #                    monster.x += dx
 #                    monster.y += dy
->>>>>>> d870c9bf0f98f39845e5248fad4433111b9e181b
+
             # pressedkeys = pygame.key.get_pressed()
             # if pygame.K_x in pressedkeys:
             #      print("x key is pressed")
