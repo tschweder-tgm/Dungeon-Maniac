@@ -27,6 +27,14 @@ mechanics, we still wanted to add something of our own.
 * Stairs to advance the floors
 * Level and Stat-system
 
+##### Implemented by JulianBurger(Fork from PyRogue)
+* Farys
+* Fireball (Not working yet)
+* Monster AI reworked
+* Flying Objects added
+* New Design (Iceworld)
+
+
 ##### Implemented by Us
 
 * Nothing yet
