@@ -722,6 +722,8 @@ class Level(object):
                 warning_signs[line[0]] = line[1:].strip()
         # read all lines again from start, because we have now a functional warning_signs dictionary
         for line in lines:
+           # print(len(line))
+
             if line[0] in "0123456789":
                 continue  # warning sign definition text, ignore this line
             if len(line) != width:
