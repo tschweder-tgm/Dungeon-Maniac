@@ -386,13 +386,13 @@ class Statue(Monster):
         return 0, 0  # statue is immobile and will never attack player, only defend it self
 
 
-class Goblin(Monster):
+class ICEDRAGON(Monster):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
         """example of a weak monster"""
         Monster.__init__(self, x, y, xp, level, hp, picture)
         # ------- put your own code here: ----
         # self.picture = random.choice((PygView.GOBLIN1, PygView.GOBLIN2, PygView.GOBLIN3))
-        self.picture = PygView.GOBLIN1
+        self.picture = PygView.ICEDRAGON1
         self.strength = random.randint(3, 9)
         self.hitpoints = random.randint(20, 25)
         self.hpmax = self.hitpoints 
@@ -400,20 +400,19 @@ class Goblin(Monster):
         # self.inventory["goblin amulet"] = 1
 
 
-class Wolf(Monster):
+class ICEWOLF(Monster):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
         """another weak monster"""
         Monster.__init__(self, x, y, xp, level, hp, picture)
         # ------- put your own code here: ----
         # self.picture = random.choice((PygView.WOLF1, PygView.WOLF2, PygView.WOLF3))
-        self.picture = PygView.WOLF1
+        self.picture = PygView.ICEWOLF
         self.strength = random.randint(3, 4)
         self.hitpoints = random.randint(15, 20)
         self.hpmax = self.hitpoints 
         # self.dexterity = random.randint(5,8)
         # a wolf can not have shield, armor etc
         self.inventory = {"fangs": 1}  # overwriting inventory from Monster, a wolf can not have other weapons
-
 
 class EliteWarrior(Boss):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
@@ -428,7 +427,6 @@ class EliteWarrior(Boss):
         self.inventory["sword"] = 1             # 100% chance to start with good equipment
         # self.inventory["shield"] = 1
 
-
 class Golem(Boss):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
         """example for a boss monster"""
@@ -437,6 +435,13 @@ class Golem(Boss):
         # self.picture = random.choice((PygView.GOLEM1, PygView.GOLEM2, PygView.GOLEM3))
         # self.strength = random.randint(20,30)   # overwrite Monster() strength
 
+class Trader(Monster):
+    def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
+        Monster.__init__(self, x, y, xp, level, hp, picture)
+        self.rank = "Villager"
+        self.name = random.choice("Gustav", "Herrmann", "Herberd", "Olivia", "Jesse", "Kevin")
+        self.z = 0
+        self.picture = PygView.VILLAGER
 
 class Player(Monster):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
@@ -457,7 +462,7 @@ class Player(Monster):
             self.hitpoints = hp
         self.hpmax = self.hitpoints
         if picture == "":
-            self.picture = PygView.PLAYERPICTURE
+            self.picture = PygView.PLAYER1
         else:
             self.picture = picture
 
@@ -535,13 +540,18 @@ class Block(object):
 class Floor(Block):
     def __init__(self):
         Block.__init__(self)
-        self.picture = random.choice((PygView.FLOOR, PygView.FLOOR1))
+        self.picture = random.choice((PygView.FLOORB1, PygView.FLOORB2))
 
 
 class Wall(Block):
     def __init__(self):
         Block.__init__(self)
-        self.picture = random.choice((PygView.WALL, PygView.WALL1, PygView.WALL2))
+        self.picture = random.choice((PygView.WALLB1, PygView.WALLB2, PygView.WALLB3, PygView.WALLB4))
+        
+#class Wall2(Wall):
+#    def __init__(self):
+#        Block.__init__(self)
+#        self.picture = PygView.WALL
 
 
 class Stair(Block):
@@ -635,6 +645,16 @@ class Loot(Item):
                                        "healing potion", "shield", "bread"])
         else:
             self.text = descr
+            
+class Coin(Loot):
+    def __init__(self, x, y, descr=""):
+        Item.__init__(self, x, y)
+        if descr == "":
+            self.text = random.choice(["coin"])
+            self.picture = PygView.COIN
+        
+        else:
+            self.text = descr
 
 
 class Error(Exception):
@@ -666,8 +686,11 @@ class Level(object):
         "B": "Boss",
         "S": "Statue",
         "L": "loot",
+        "$": "coin",
         "a": "Apple",
-        "k": "key"
+        "k": "key",
+        "ï": "wall",
+        "V": "Trader"
     }
 
     @staticmethod
@@ -763,6 +786,7 @@ class Level(object):
         self.doors = []
         self.fruits = []
         self.loot = []
+        self.coin = []
         self.keys = []
         self.width = 0
         self.depth = 0
@@ -773,7 +797,7 @@ class Level(object):
                 # if not overwritten later by a Wall() object etc., each tile is a Floor()
                 self.layout[(x, y)] = Floor()
                 if char == "M":
-                    self.monsters.append(random.choice([Goblin(x, y), Wolf(x, y)]))  # insert your own Monsters here
+                    self.monsters.append(random.choice([ICEDRAGON(x, y), ICEWOLF(x, y)]))  # insert your own Monsters here
                 elif char == "B":
                     # insert your own boss monsters here
                     self.monsters.append(random.choice([EliteWarrior(x, y), Golem(x, y)]))
@@ -787,6 +811,8 @@ class Level(object):
                     self.fruits.append(Fruit(x,y))     # object on top of Floor()
                 elif char == "L":
                     self.loot.append(Loot(x, y))        # object on top of Floor()
+                elif char == "$":
+                    self.loot.append(Coin(x, y))
                 elif char == "k":
                     self.keys.append(Key(x, y))         # object on top of Floor()
                 elif char == "<":
@@ -799,10 +825,14 @@ class Level(object):
                     self.signs.append(Sign(x, y, char))   # the char is the key of self.signsdict
                 elif char == "#":
                     self.layout[(x, y)] = Wall()           # overwrite Wall() instead of Floor()
+#                elif char == "V":
+#                    self.layout[(x, y)] = Wall2() 
                 x += 1
             y += 1
             self.width = max(self.width, x)
-            self.depth = max(self.depth, y)
+            self.depth = max(self.depth, y)          # overwrite Wall() instead of Floor()
+
+                 
 
         # now it is possible to assign the values from signdict to the signs
         for sign in self.signs:
@@ -815,6 +845,7 @@ class Level(object):
         self.fruits = [f for f in self.fruits if f.hitpoints >0]
         self.keys = [k for k in self.keys if not k.carried]
         self.loot = [i for i in self.loot if not i.carried]
+        self.coin = [c for c in self.coin if not c.carried]
         self.doors = [d for d in self.doors if d.closed]  # opened doors disappear
         #print("fruits:", len(self.fruits))
 
@@ -884,6 +915,7 @@ class Flytext(pygame.sprite.Sprite):
 
 
 class FlyImage(pygame.sprite.Sprite):
+<<<<<<< HEAD
     def __init__(self, start_x, start_y, target_x, target_y, image, duration=1, acceleration_factor = 1.00):
         """an image  flying toward a target"""
         self._layer = 7  # order of sprite layers (before / behind other sprites)
@@ -893,6 +925,18 @@ class FlyImage(pygame.sprite.Sprite):
         self.x, self.y = PygView.scrollx + start_x * 32, PygView.scrolly + start_y * 32 + 16
         self.tx, self.ty = PygView.scrollx + target_x * 32, PygView.scrolly + target_y * 32 + 16
         self.duration = duration  # duration of flight in seconds
+=======
+    def __init__(self, start_x, start_y, target_x, target_y, image1, image2, image3, image4, duration=1, acceleration_factor = 1.00):
+        """an image  flying toward a target"""
+        self._layer = 7  # order of sprite layers (before / behind other sprites)
+        pygame.sprite.Sprite.__init__(self, self.groups)  # THIS LINE IS IMPORTANT !!
+        self.image = image1
+        self.images = [image1, image2, image3, image4]
+        self.rect = self.image.get_rect()
+        self.x, self.y = PygView.scrollx + start_x * 32, PygView.scrolly + start_y * 32 + 16
+        self.tx, self.ty = PygView.scrollx + target_x * 32, PygView.scrolly + target_y * 32 + 16
+        self.duration = duration  # duration of flight in seconds 
+>>>>>>> d870c9bf0f98f39845e5248fad4433111b9e181b
         self.acc = acceleration_factor  # if < 1, Text moves slower. if > 1, text moves faster. 
         self.dx = (self.tx - self.x) / self.duration
         self.dy = (self.ty - self.y) / self.duration
@@ -906,6 +950,7 @@ class FlyImage(pygame.sprite.Sprite):
         self.x += self.dx * seconds
         self.dy *= self.acc  # slower and slower
         self.dx *= self.acc
+        self.image = random.choice(self.images)
         self.rect.center = (self.x, self.y)
         self.time += seconds
         if self.time > self.duration:
@@ -946,10 +991,13 @@ class PygView(object):
         PygView.GUI = Spritesheet("gui.png")        # 32 x 17
         PygView.FEAT = Spritesheet("feat-keanu.png")      # 32 x 16
         PygView.MAIN = Spritesheet("main-keanu.png")      # 32 x 29
+        #PygView.VOIDALTAR = Spritesheet("VoidAltar.png")
         # ------ get a single picture using image_at(x upperleft corner, y upperleft corner, width, height)
         PygView.WALL = PygView.WALLS.image_at((0, 0, 34, 32))  
         PygView.WALL1 = PygView.WALLS.image_at((34, 0, 32, 32))
         PygView.WALL2 = PygView.WALLS.image_at((68, 0, 32, 32))
+        # ----------- VoidDungen --------------
+        PygView.VOIDALTAR1 = PygView.WALLS.image_at((0, 0, 32, 32))
         # PygView.SIGN  = PygView.GUI.image_at((32*6,0,32,32))
         PygView.FLOOR = PygView.FLOORS.image_at((160, 32*2, 32, 32))
         PygView.FLOOR1 = PygView.FLOORS.image_at((192, 160, 32, 32))
@@ -971,6 +1019,24 @@ class PygView(object):
         PygView.TRADER = pygame.image.load(os.path.join("images", "hakim.png"))
         PygView.DRUID = pygame.image.load(os.path.join("images", "druid.png"))
         PygView.GAMEOVER = pygame.image.load(os.path.join("images", "gameover.jpg"))
+        # ----- Spells-------
+        PygView.FIREBALL1 = pygame.image.load(os.path.join("images", "FireBall1.png"))
+        PygView.FIREBALL2 = pygame.image.load(os.path.join("images", "FireBall2.png"))
+        PygView.FIREBALL3 = pygame.image.load(os.path.join("images", "FireBall3.png"))
+        PygView.FIREBALL4 = pygame.image.load(os.path.join("images", "FireBall4.png"))
+        # ---------- simple walls ----------
+        PygView.WALLB1 = pygame.image.load(os.path.join("images", "WALLBLUE1.png"))
+        PygView.WALLB2 = pygame.image.load(os.path.join("images", "WALLBLUE2.png"))
+        PygView.WALLB3 = pygame.image.load(os.path.join("images", "WALLBLUE3.png"))
+        PygView.WALLB4 = pygame.image.load(os.path.join("images", "WALLBLUE4.png"))
+        # ---------- simple floors ----------
+        PygView.FLOORB1 = pygame.image.load(os.path.join("images", "FLOOR1.png"))
+        PygView.FLOORB2 = pygame.image.load(os.path.join("images", "FLOOR2.png"))
+        # ---------- simple player ----------
+        PygView.PLAYER1 = pygame.image.load(os.path.join("images", "player1.png"))
+        PygView.ICEDRAGON1 = pygame.image.load(os.path.join("images", "ICEDRAGON.png"))
+        PygView.ICEWOLF = pygame.image.load(os.path.join("images", "Wolf.png"))
+        PygView.VILLAGER1 = pygame.image.load(os.path.join("images", "Villager.png"))
         # --------- create player instance --------------
         self.player = Player(x, y, xp, level, hp)
         # ---- ask player to enter his name --------
@@ -1001,7 +1067,7 @@ class PygView(object):
         PygView.bowsound = load_sound("bow.ogg")
         PygView.macesound = load_sound("mace.wav")
         load_music("the_king_is_dead.ogg")  # music loop
-        # pygame.mixer.music.play()  # start background music
+        pygame.mixer.music.play()  # start background music
         # pygame.mixer.music.stop()
         # pygame.mixer.music.pause()
         # pygame.mixer.music.unpause()
@@ -1031,6 +1097,9 @@ class PygView(object):
                 if char == "#":  # wall
                     pygame.draw.rect(self.map, (150, 150, 150), (x * self.mapzoom + scrollx, y * self.mapzoom + scrolly,
                                      self.mapzoom, self.mapzoom))
+#                elif char == "V":  # wall
+#                      pygame.draw.rect(self.map, (150, 150, 150), (x * self.mapzoom + scrollx, y * self.mapzoom + scrolly,
+#                                       self.mapzoom, self.mapzoom))
                 elif char == "<":  # stair up
                     pygame.draw.rect(self.map, (255, 150, 150), (x * self.mapzoom + scrollx, y * self.mapzoom + scrolly,
                                      self.mapzoom, self.mapzoom))
@@ -1065,6 +1134,8 @@ class PygView(object):
                     self.background.blit(door.picture, (x * 32, y * 32))
                 for loot in [l for l in self.level.loot if l.x == x and l.y == y and not l.carried]:
                     self.background.blit(loot.picture, (x * 32, y * 32))
+                for coin in [c for c in self.level.coin if c.x == x and c.y == y and not c.carried]:
+                    self.background.blit(coin.picture, (x * 32, y * 32))
                 for fruit in [f for f in self.level.fruits if f.x == x and f.y == y and f.hitpoints >0]:
                     self.background.blit(fruit.picture, (x* 32, y * 32))
                 for key in [k for k in self.level.keys if k.x == x and k.y == y and not k.carried]:
@@ -1173,8 +1244,12 @@ class PygView(object):
                         txt = []
                         target_x, target_y = get_mousetile()
                         targetmonster = self.level.is_monster(get_mousetile()[0], get_mousetile()[1])
+<<<<<<< HEAD
                         FlyImage(self.player.x, self.player.y, get_mousetile()[0], get_mousetile()[1], image=PygView.APPLE)
                         
+=======
+                        FlyImage(self.player.x, self.player.y, get_mousetile()[0], get_mousetile()[1], image1=PygView.FIREBALL1, image2=PygView.FIREBALL2, image3=PygView.FIREBALL3, image4=PygView.FIREBALL4)
+>>>>>>> d870c9bf0f98f39845e5248fad4433111b9e181b
                         # ------------ magic distance combat -------------
                         if not targetmonster:
                             txt.append("magic spell wasted")
@@ -1323,12 +1398,13 @@ class PygView(object):
                         self.player.dx, self.player.dy = 0, 0
                         self.count_monsters()
                     # ----- testing if player runs into wall
-                    elif type(whereto).__name__ == "Wall":         # in die Wand gelaufen?
+                    elif type(whereto).__name__ == "Wall": # or type(whereto).__name__ == "Wall2":         # in die Wand gelaufen?
                         self.status.append("{}: Please don't run into walls!".format(self.turns))
                         self.player.hitpoints -= 1
                         self.player.damaged = True
                         Flytext(self.player.x, self.player.y, "Ouch! Dmg: 1 hp")
                         self.player.dx, self.player.dy = 0, 0
+                
                     # ----- testing if player runs into door
                     for door in [d for d in self.level.doors if d.x == self.player.x+self.player.dx and
                                  d.y == self.player.y + self.player.dy and d.closed]:
@@ -1487,6 +1563,18 @@ class PygView(object):
                         continue  # monster should not run into door. waiting instead
                     monster.x += dx
                     monster.y += dy
+<<<<<<< HEAD
+=======
+#                    whereto = self.level.layout[(x+dx, y+dy)]
+#                    if type(whereto).__name__ == "WallVOIDALTAR":
+#                        continue     # monster should not run into wall. waiting instead
+#                    if len([t for t in self.level.traps if t.x == x + dx and t.y == y + dy]) > 0:
+#                        continue     # monster should not run into trap. waiting instead
+#                    if len([d for d in self.level.doors if d.x == x + dx and d.y == y + dy]) > 0:
+#                        continue  # monster should not run into door. waiting instead
+#                    monster.x += dx
+#                    monster.y += dy
+>>>>>>> d870c9bf0f98f39845e5248fad4433111b9e181b
             # pressedkeys = pygame.key.get_pressed()
             # if pygame.K_x in pressedkeys:
             #      print("x key is pressed")
