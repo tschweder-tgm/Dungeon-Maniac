@@ -995,6 +995,7 @@ class PygView(object):
         PygView.GUI = Spritesheet("gui.png")        # 32 x 17
         PygView.FEAT = Spritesheet("feat-keanu.png")      # 32 x 16
         PygView.MAIN = Spritesheet("main-keanu.png")      # 32 x 29
+        PygView.FOREST = pygame.image.load(os.path.join("images", "forest.jpg"))
         #PygView.VOIDALTAR = Spritesheet("VoidAltar.png")
         # ------ get a single picture using image_at(x upperleft corner, y upperleft corner, width, height)
         PygView.WALL = PygView.WALLS.image_at((0, 0, 34, 32))  
@@ -1044,7 +1045,7 @@ class PygView(object):
         # --------- create player instance --------------
         self.player = Player(x, y, xp, level, hp)
         # ---- ask player to enter his name --------
-        self.player.name = ask("Your name [Enter]? >>", self.screen, PygView.DRUID)
+        self.player.name = ask("Your name [Enter]? >>", self.screen, PygView.FOREST, x=50, y=12, center=True,  imagex=0, imagey=0, fontcolor=(0, 240, 255), fontsize=42, font=None)
         self.player.name = self.player.name[0].upper() + self.player.name[1:].lower()
         self.levels = []
         for lines, signs in checked_list_of_levels:     # checked by Level.check_levels()
