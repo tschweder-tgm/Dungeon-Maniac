@@ -982,7 +982,7 @@ class PygView(object):
         # self.screen = pygame.display.set_mode(self.screenrect.size, winstyle, bestdepth)
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
         self.fps = 30  # frames per second
-        pygame.display.set_caption("Press ESC to quit")
+        pygame.display.set_caption("Dungeon Maniac")
         self.gui_height = 100  # height in pixel of bottom gui area
         self.gui_width = 150   # width in pixel of right side gui area
         self.map = pygame.Surface((self.gui_width, self.gui_height))
@@ -1582,7 +1582,7 @@ class PygView(object):
             # if pygame.K_x in pressedkeys:
             #      print("x key is pressed")
             # ------------ redraw screen, blit the sprites --------------
-            pygame.display.set_caption("  press Esc to quit. Fps: %.2f (%i x %i)" % (
+            pygame.display.set_caption("  Dungeon Maniac. Fps: %.2f (%i x %i)" % (
                                        self.clock.get_fps(), self.width, self.height))
             self.paint() # paint this level
             # -------- firemode -----
