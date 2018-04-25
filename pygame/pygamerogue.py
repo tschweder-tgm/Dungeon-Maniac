@@ -1627,8 +1627,8 @@ class save():
         open('save.dat', 'w').close()  # clears the savefile
 
     def dump(self):
-        player = self.player
-        levelstate = self.levels
+        player = Player.player
+        levelstate = Level.levels
         with open('save.dat', 'w') as f:
             pickle.dump([player,levelstate], f)
             f.close()
@@ -1638,8 +1638,8 @@ class save():
             with open('save.dat', 'a') as f:
                 player, levelstate = pickle.load(f)
                 f.close()
-            self.player = player
-            self.levels = levelstate
+            Player.player = player
+            Level.levels = levelstate
         else :
             print('No Data found!')
 
