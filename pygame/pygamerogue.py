@@ -1623,16 +1623,21 @@ class PygView(object):
         pygame.quit()    # end  pygame  # TODO: game sometimes hangs here. PYthon3+pygame bug?
         sys.exit()      # end python
 class save():
+    def newGame(self):
+        open('save.dat', 'w').close()  # clears the savefile
+
     def dump(self):
         player = self.player
         levelstate = self.levels
-        with open('save.dat', 'a') as f:
+        with open('save.dat', 'w') as f:
             pickle.dump([player,levelstate], f)
+            f.close()
 
     def load(self):
         if os.path.getsize(save.dat) > 0:
             with open('save.dat', 'a') as f:
                 player, levelstate = pickle.load(f)
+                f.close()
             self.player = player
             self.levels = levelstate
         else :
