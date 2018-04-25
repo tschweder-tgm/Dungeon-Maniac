@@ -4,6 +4,7 @@ from __future__ import print_function  # only necessary for python version2
 from __future__ import division        # only necessary for python version2
 import sys
 
+
 try:                                   # only necessary for python version2
     input = raw_input                  # only necessary for python version2
 except NameError:                      # only necessary for python version2
@@ -19,7 +20,7 @@ Description: a rogue game using python + pygame. graphics from dungeon crawl sto
              and sound and graphics from battle of Wesnoth. please see readme.txt and
              LICENSE for license details.
 """
-
+import pickle
 import pygame
 import random
 import os
@@ -1620,6 +1621,61 @@ class PygView(object):
             print(line)
         pygame.quit()    # end  pygame  # TODO: game sometimes hangs here. PYthon3+pygame bug?
         sys.exit()      # end python
+class save():
+#class attributes for player
+    rank = ""
+    name = ""
+    inventory = {""}
+    keys = ""
+    mana = 0
+    hitpoints = 0
+    picture = ""
+    x = 0 # Coordinate
+    y = 0 # Coordinate
+    def getPlayer(self):
+        self.rank = self.player.rank
+        self.name = self.player.name
+        self.inventory = self.player.inventory
+        self.keys = self.player.keys
+        self.mana = self.player.mana
+        self.hitpoints = self.player.hitpoints
+        self.x = self.player.dx
+        self.y = self.player.dy
+
+    def getLevels(self):
+
+        for monster in self.level.monsters:
+            monster.update_health()
+            self.screen.blit(monster.picture, (PygView.scrollx + monster.x * 32, PygView.scrolly + monster.y * 32))
+        health = int(monster.health * 32)
+        pygame.draw.rect(self.screen, (255, 0, 0), (PygView.scrollx + monster.x * 32,
+                                                    PygView.scrolly + monster.y * 32 - 15, 32, 5))
+        # overwrite with green health bar
+        pygame.draw.rect(self.screen, (0, 255, 0), (PygView.scrollx + monster.x * 32,
+                                                    PygView.scrolly + monster.y * 32 - 15, health, 5))
+
+    def write(self):
+      #player.rank, player.name, player.inventory, player.keys, player.mana, player.hitpoints, player.picture
+        with open('save.txt', 'a') as f:
+#------------------------PLAYER------------------------#
+            f.write('Player:\n')
+            f.write('Rank: ' + self.rank)
+            f.write(', Name: ' + self.name)
+            f.write(', Inventory: ' + self.inventory)
+            f.write(', Keys: ' + self.keys)
+            f.write(', Mana: ' + self.mana)
+            f.write(', Hitpoints: ' + self.hitpoints)
+            f.write(', X: ' + self.x)
+            f.write(', Y: ' + self.y)
+            f.write('\n')
+
+#------------------------MAP------------------------#
+            f.write('Map:\n')
+
+#------------------------LEVELS------------------------#
+
+    def read(self):
+        pass
 
 
 if __name__ == '__main__':
