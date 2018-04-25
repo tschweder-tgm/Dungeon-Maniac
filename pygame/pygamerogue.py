@@ -1627,19 +1627,21 @@ class save():
         open('save.dat', 'w').close()  # clears the savefile
 
     def dump(self):
-        player = Player.player
-        levelstate = Level.levels
+        player = PygView.player
+        levelstate = PygView.levels
+        playerInventory = Player.inventory
         with open('save.dat', 'w') as f:
-            pickle.dump([player,levelstate], f)
+            pickle.dump([player,levelstate, playerInventory], f)
             f.close()
 
     def load(self):
         if os.path.getsize(save.dat) > 0:
             with open('save.dat', 'a') as f:
-                player, levelstate = pickle.load(f)
+                player, levelstate, playerInventory = pickle.load(f)
                 f.close()
-            Player.player = player
-            Level.levels = levelstate
+            PygView.player = player
+            PygView.levels = levelstate
+            Player.inventory = playerInventory
         else :
             print('No Data found!')
 
