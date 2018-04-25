@@ -983,7 +983,7 @@ class PygView(object):
         # self.screen = pygame.display.set_mode(self.screenrect.size, winstyle, bestdepth)
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
         self.fps = 30  # frames per second
-        pygame.display.set_caption("Press ESC to quit")
+        pygame.display.set_caption("Dungeon Maniac")
         self.gui_height = 100  # height in pixel of bottom gui area
         self.gui_width = 150   # width in pixel of right side gui area
         self.map = pygame.Surface((self.gui_width, self.gui_height))
@@ -996,6 +996,7 @@ class PygView(object):
         PygView.GUI = Spritesheet("gui.png")        # 32 x 17
         PygView.FEAT = Spritesheet("feat-keanu.png")      # 32 x 16
         PygView.MAIN = Spritesheet("main-keanu.png")      # 32 x 29
+        PygView.FOREST = pygame.image.load(os.path.join("images", "forest.jpg"))
         #PygView.VOIDALTAR = Spritesheet("VoidAltar.png")
         # ------ get a single picture using image_at(x upperleft corner, y upperleft corner, width, height)
         PygView.WALL = PygView.WALLS.image_at((0, 0, 34, 32))  
@@ -1045,7 +1046,7 @@ class PygView(object):
         # --------- create player instance --------------
         self.player = Player(x, y, xp, level, hp)
         # ---- ask player to enter his name --------
-        self.player.name = ask("Your name [Enter]? >>", self.screen, PygView.DRUID)
+        self.player.name = ask("Your name [Enter]? >>", self.screen, PygView.FOREST, x=50, y=12, center=True,  imagex=0, imagey=0, fontcolor=(0, 240, 255), fontsize=42, font=None)
         self.player.name = self.player.name[0].upper() + self.player.name[1:].lower()
         self.levels = []
         for lines, signs in checked_list_of_levels:     # checked by Level.check_levels()
@@ -1583,7 +1584,7 @@ class PygView(object):
             # if pygame.K_x in pressedkeys:
             #      print("x key is pressed")
             # ------------ redraw screen, blit the sprites --------------
-            pygame.display.set_caption("  press Esc to quit. Fps: %.2f (%i x %i)" % (
+            pygame.display.set_caption("  Dungeon Maniac. Fps: %.2f (%i x %i)" % (
                                        self.clock.get_fps(), self.width, self.height))
             self.paint() # paint this level
             # -------- firemode -----
