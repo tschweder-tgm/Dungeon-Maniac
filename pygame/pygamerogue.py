@@ -1018,7 +1018,7 @@ class PygView(object):
         PygView.GUI = Spritesheet("gui.png")        # 32 x 17
         PygView.FEAT = Spritesheet("feat-keanu.png")      # 32 x 16
         PygView.MAIN = Spritesheet("main-keanu.png")      # 32 x 29
-        PygView.FOREST = pygame.image.load(os.path.join("images", "druid.png"))
+        PygView.FOREST = pygame.image.load(os.path.join("images", "forest.jpg"))
         #PygView.VOIDALTAR = Spritesheet("VoidAltar.png")
         # ------ get a single picture using image_at(x upperleft corner, y upperleft corner, width, height)
         PygView.WALL = PygView.WALLS.image_at((0, 0, 34, 32))  
