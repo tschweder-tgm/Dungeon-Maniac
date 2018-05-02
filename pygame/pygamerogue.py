@@ -966,7 +966,7 @@ class FlyImage(pygame.sprite.Sprite):
 class PygView(object):
     scrollx = 0  # class variables, can be read from everywhere
     scrolly = 0
-
+    white = (255,255,255)
     def __init__(self, checked_list_of_levels, width=640, height=400, x=1, y=1, xp=0, level=1, hp=50, fullscreen=False):
         if fullscreen:
             winstyle = pygame.FULLSCREEN
@@ -982,6 +982,28 @@ class PygView(object):
         # bestdepth = pygame.display.mode_ok(self.screenrect.size, winstyle, 32)
         # self.screen = pygame.display.set_mode(self.screenrect.size, winstyle, bestdepth)
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
+        intro = True
+        while intro:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_KP_ENTER:
+                        intro = False
+                        save.load()
+                    if event.key == pygame.K_x:
+                        pygame.quit()
+                        quit()
+                    if event.key == pygame.K_e:
+                        intro = False
+            self.screen.fill((255,255,255))
+            write("Welcome to Dungeon Maniac", (0, 0, 0), 24)
+            write("Press ENTER to CONTINUE", (0, 0, 0), 24)
+            write("Press   E   for NEW GAME", (0, 0, 0), 24)
+            write("Press   S   for SETTINGS", (0, 0, 0), 24)
+            write("Press   X   to EXIT GAME", (0, 0, 0), 24)
+            pygame.display.update()
         self.fps = 30  # frames per second
         pygame.display.set_caption("Dungeon Maniac")
         self.gui_height = 100  # height in pixel of bottom gui area
@@ -1650,4 +1672,5 @@ if __name__ == '__main__':
     sourcefilenames = ["level001.txt", "level002.txt"]
     levels = Level.check_levels(sourcefilenames)         # testing level for design errors
     # 800 x 600 pixel, Player start at x=1, y=1, in level 0 (the first level) with 0 xp, has level 1 and 50 hit points
+    # PygView.game_intro()
     PygView(levels, 800, 600, 1, 1, 0, 1, 50).run()
