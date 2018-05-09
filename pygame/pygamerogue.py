@@ -650,10 +650,36 @@ class Loot(Item):
         if descr == "":
             self.text = random.choice(["trash", "meat", "coin", "knife", "rags",
                                        "spoon", "stone", "sword", "armor", "gem",
-                                       "healing potion", "shield", "bread"])
+                                       "healing_potion", "shield", "bread"])
         else:
             self.text = descr
-            
+        if self.text == "trash":
+            self.picture = PygView.TRASH
+        elif self.text == "meat":
+            self.picture = PygView.MEAT
+        elif self.text == "coin":
+            self.picture = PygView.COIN
+        elif self.text == "knife":
+            self.picture = PygView.KNIFE
+        elif self.text == "rags":
+            self.picture = PygView.RAGS
+        elif self.text == "spoon":
+            self.picture = PygView.SPOON
+        elif self.text == "stone":
+            self.picture = PygView.STONE
+        elif self.text == "sword":
+            self.picture = PygView.SWORD
+        elif self.text == "armor":
+            self.picture = PygView.ARMOR
+        elif self.text == "gem":
+            self.picture = PygView.GEM
+        elif self.text == "healing_potion":
+            self.picture = PygView.HEALING_POTION
+        elif self.text == "shield":
+            self.picture = PygView.SHIELD
+        elif self.text == "bread":
+            self.picture = PygView.BREAD
+
 class Coin(Loot):
     def __init__(self, x, y, descr=""):
         Item.__init__(self, x, y)
@@ -1056,6 +1082,22 @@ class PygView(object):
         #lootpng = Loot.text + ".png"
         #PygView.LOOT = pygame.image.load(os.path.join("images", str(lootpng)))
         PygView.LOOT = PygView.MAIN.image_at((155, 672, 32, 32), (0, 0, 0))
+
+        PygView.TRASH = pygame.image.load(os.path.join("images", "trash.png"))
+        PygView.MEAT = pygame.image.load(os.path.join("images", "meat.png"))
+        PygView.COIN = pygame.image.load(os.path.join("images", "coin.png"))
+        PygView.KNIFE = pygame.image.load(os.path.join("images", "knife.png"))
+        PygView.RAGS = pygame.image.load(os.path.join("images", "rags.png"))
+        PygView.SPOON = pygame.image.load(os.path.join("images", "spoon.png"))
+        PygView.STONE = pygame.image.load(os.path.join("images", "stone.png"))
+        PygView.SWORD = pygame.image.load(os.path.join("images", "sword.png"))
+        PygView.ARMOR = pygame.image.load(os.path.join("images", "armor.png"))
+        PygView.GEM = pygame.image.load(os.path.join("images", "gem.png"))
+        PygView.HEALING_POTION = pygame.image.load(os.path.join("images", "healing_potion.png"))
+        PygView.SHIELD = pygame.image.load(os.path.join("images", "shield.png"))
+        PygView.BREAD = pygame.image.load(os.path.join("images", "bread.png"))
+
+
 
 
 
