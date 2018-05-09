@@ -49,6 +49,11 @@ def write(msg="pygame is cool", fontcolor=(255, 0, 255), fontsize=42, font=None)
     mytext = mytext.convert_alpha()
     return mytext
 
+def message_to_screen(msg,color,screen,fontSize,imagex=0,imagey=0):
+    font = pygame.font.SysFont(None, fontSize)
+    screen_text = font.render(msg, True, color)
+    screen.blit(screen_text, [imagex, imagey])
+
 def get_mousetile():
     """get x and y position of the tile (tile-coord system, not pixel) where the mousepointer is hovering over"""
     x = -((PygView.scrollx - pygame.mouse.get_pos()[0]) // 32 )-1
@@ -997,12 +1002,17 @@ class PygView(object):
                         quit()
                     if event.key == pygame.K_e:
                         intro = False
-            self.screen.fill((255,255,255))
-            write("Welcome to Dungeon Maniac", (0, 0, 0), 24)
-            write("Press ENTER to CONTINUE", (0, 0, 0), 24)
-            write("Press   E   for NEW GAME", (0, 0, 0), 24)
-            write("Press   S   for SETTINGS", (0, 0, 0), 24)
-            write("Press   X   to EXIT GAME", (0, 0, 0), 24)
+            self.screen.fill((167, 255, 158))
+            message_to_screen("Welcome to Dungeon Maniac",(0, 0, 0),self.screen,70,PygView.width/14,100)
+            message_to_screen("Press ENTER to CONTINUE", (0, 0, 0), self.screen, 35,235,250)
+            message_to_screen("Press  E  for NEW GAME", (0, 0, 0), self.screen, 35,250,300)
+            message_to_screen("Press  S  for SETTINGS", (0, 0, 0), self.screen, 35,253,325)
+            message_to_screen("Press  X  for EXIT GAME", (200, 0, 0), self.screen, 35,250,375)
+            #write("Welcome to Dungeon Maniac", (0, 0, 0), 24)
+            #write("Press ENTER to CONTINUE", (0, 0, 0), 24)
+            #write("Press   E   for NEW GAME", (0, 0, 0), 24)
+            #write("Press   S   for SETTINGS", (0, 0, 0), 24)
+            #write("Press   X   to EXIT GAME", (0, 0, 0), 24)
             pygame.display.update()
         self.fps = 30  # frames per second
         pygame.display.set_caption("Dungeon Maniac")
@@ -1674,6 +1684,7 @@ class save():
             Player.inventory = playerInventory
         else :
             print('No Data found!')
+
 
 if __name__ == '__main__':
     # add your own level files here. use os.path.join() for other folders
