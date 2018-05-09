@@ -1040,7 +1040,15 @@ class PygView(object):
         PygView.WOLF1 = PygView.FIGUREN.image_at((667, 607, 32, 32), (0, 0, 0))
         PygView.WARRIOR1 = PygView.FIGUREN.image_at((405, 989, 32, 32), (0, 0, 0))
         PygView.DOOR = PygView.FEAT.image_at((32*2, 32, 32, 32))
+
+
+
+        #lootpng = Loot.text + ".png"
+        #PygView.LOOT = pygame.image.load(os.path.join("images", str(lootpng)))
         PygView.LOOT = PygView.MAIN.image_at((155, 672, 32, 32), (0, 0, 0))
+
+
+
         PygView.KEY = PygView.FIGUREN.image_at((54, 1682, 32, 32), (0, 0, 0))
         PygView.SIGN = PygView.GUI.image_at((197, 0, 32, 32), (0, 0, 0))
         # ------- portraits -----
