@@ -152,9 +152,10 @@ def combat_round(attacker, defender, level):
         stats = {"sword": (2, 5, 0.1,  0.01),
                  "knife": (2, 3, 0.05, 0.01),
                  "fangs": (1, 3, 0.15, 0.00),
-                 "fist":  (1, 2, 0.01, 0.00)}
+                 "fist":  (1, 2, 0.01, 0.00),
+                 "snout": (0, 0, 0.00, 0.00),}
         # order weapons here from best to worst. fist must be last item in list
-        for weapon in ["sword", "knife", "fangs", "fist"]:
+        for weapon in ["sword", "knife", "fangs", "fist", "snout"]:
             if weapon in attacker.inventory:
                 damage = random.randint(stats[weapon][0], stats[weapon][1])
                 #if weapon == "fangs":
@@ -319,6 +320,7 @@ class Monster(object):
         self.level = level   # each monster starts with level 1, may progress into higher levels
         self.rank = ""
         self.damaged = False  # to calculate the full hitpoints. each monster start at full health
+        self.name = ""
         if hp == 0:
             self.hitpoints = random.randint(10, 20)
         else:
@@ -328,7 +330,6 @@ class Monster(object):
             self.picture = PygView.MONSTERPICTURE
         else:
             self.picture = picture
-        #self.name = random.choice(("Frank", "Dilbert", "Bob", "Alice"))
         self.strength = random.randint(1, 6)
         self.dexterity = random.randint(1, 6)
         self.intelligence = random.randint(1, 6)
@@ -379,7 +380,7 @@ class Boss(Monster):
         """a monster that moves toward the player"""
         Monster.__init__(self, x, y, xp, level, hp, picture)
         self.sight_radius = 7  # boss can see farther to hunt player
-        self.hpmax = self.hitpoints 
+        self.hpmax = self.hitpoints
 
 
 class Statue(Monster):
@@ -388,39 +389,42 @@ class Statue(Monster):
         Monster.__init__(self, x, y, xp, level, hp, picture)
         self.picture = PygView.STATUE1
         self.hitpoints = 50
-        self.hpmax = self.hitpoints 
+        self.hpmax = self.hitpoints
+        self.name = Statue
 
     def ai(self, player):
         return 0, 0  # statue is immobile and will never attack player, only defend it self
 
 
-class ICEDRAGON(Monster):
+class DRAGON(Monster):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
         """example of a weak monster"""
         Monster.__init__(self, x, y, xp, level, hp, picture)
         # ------- put your own code here: ----
         # self.picture = random.choice((PygView.GOBLIN1, PygView.GOBLIN2, PygView.GOBLIN3))
-        self.picture = PygView.ICEDRAGON1
+        self.picture = PygView.DRAGON1
         self.strength = random.randint(3, 9)
         self.hitpoints = random.randint(20, 25)
         self.hpmax = self.hitpoints 
         # -- give something into inventory
         # self.inventory["goblin amulet"] = 1
+        self.name = DRAGON
 
 
-class ICEWOLF(Monster):
+class WOLF(Monster):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
         """another weak monster"""
         Monster.__init__(self, x, y, xp, level, hp, picture)
         # ------- put your own code here: ----
         # self.picture = random.choice((PygView.WOLF1, PygView.WOLF2, PygView.WOLF3))
-        self.picture = PygView.ICEWOLF
+        self.picture = PygView.WOLF
         self.strength = random.randint(3, 4)
         self.hitpoints = random.randint(15, 20)
         self.hpmax = self.hitpoints 
         # self.dexterity = random.randint(5,8)
         # a wolf can not have shield, armor etc
         self.inventory = {"fangs": 1}  # overwriting inventory from Monster, a wolf can not have other weapons
+        self.name = "WOLF"
 
 class EliteWarrior(Boss):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
@@ -428,12 +432,13 @@ class EliteWarrior(Boss):
         Monster.__init__(self, x, y, xp, level, hp, picture)
         # ------- put your own code here: ----
         self.hitpoints = 32
-        self.hpmax = self.hitpoints 
+        self.hpmax = self.hitpoints
         # self.picture = random.choice((PygView.WARRIOR1, PygView.WARRIOR2, PygView.WARRIOR3))
         self.picture = PygView.WARRIOR1
         # self.strength = random.randint(12,24)   # more strength
         self.inventory["sword"] = 1             # 100% chance to start with good equipment
         # self.inventory["shield"] = 1
+        self.name="ELITEWARRIOR"
 
 class Golem(Boss):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
@@ -442,6 +447,17 @@ class Golem(Boss):
         # ------- put your own code here: ----
         # self.picture = random.choice((PygView.GOLEM1, PygView.GOLEM2, PygView.GOLEM3))
         # self.strength = random.randint(20,30)   # overwrite Monster() strength
+        self.name = "GOLEM"
+
+class Piggy(Boss):
+    def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
+        Monster.__init__(self,x,y,xp,level,hp,picture)
+        self.picture = PygView.PIGGY
+        self.strength = 0
+        self.hitpoints = 40
+        self.name = "PIGGY"
+        self.inventory={"snout":1}
+        self.sight_radius = 3
 
 class Trader(Monster):
     def __init__(self, x, y, xp=0, level=1, hp=0, picture=""):
@@ -836,10 +852,10 @@ class Level(object):
                 # if not overwritten later by a Wall() object etc., each tile is a Floor()
                 self.layout[(x, y)] = Floor()
                 if char == "M":
-                    self.monsters.append(random.choice([ICEDRAGON(x, y), ICEWOLF(x, y)]))  # insert your own Monsters here
+                    self.monsters.append(random.choice([DRAGON(x, y), WOLF(x, y)]))  # insert your own Monsters here
                 elif char == "B":
                     # insert your own boss monsters here
-                    self.monsters.append(random.choice([EliteWarrior(x, y), Golem(x, y)]))
+                    self.monsters.append(random.choice([Piggy(x, y)]))
                 elif char == "S":
                     self.monsters.append(Statue(x, y))  # stationary Monster
                 elif char == "T":
@@ -1144,8 +1160,9 @@ class PygView(object):
 
         # ---------- simple player ----------
         PygView.PLAYER1 = pygame.image.load(os.path.join("images", "player1.png"))
-        PygView.ICEDRAGON1 = pygame.image.load(os.path.join("images", "ICEDRAGON.png"))
-        PygView.ICEWOLF = pygame.image.load(os.path.join("images", "Wolf.png"))
+        PygView.DRAGON1 = pygame.image.load(os.path.join("images", "dragon.png"))
+        PygView.WOLF = pygame.image.load(os.path.join("images", "wolf.png"))
+        PygView.PIGGY = pygame.image.load(os.path.join("images", "piggy.png"))
         PygView.VILLAGER1 = pygame.image.load(os.path.join("images", "Villager.png"))
         # --------- create player instance --------------
         self.player = Player(x, y, xp, level, hp)
@@ -1385,7 +1402,8 @@ class PygView(object):
                                 line = self.player.check_levelup()
                                 if line:
                                     txt.append(line)
-                                if random.random() < 0.5:    # 50% Chance to drop edibles
+
+                                if random.random() < 0.5 :    # 50% Chance to drop edibles
                                     self.level.loot.append(Loot(targetmonster.x, targetmonster.y, "meat"))
                         self.status.extend(txt)    
                                             
@@ -1658,6 +1676,23 @@ class PygView(object):
                     #monster.update_health()
                     x, y = monster.x, monster.y
                     dx, dy = monster.ai(self.player)
+#                   <---------------------------Are you Piggy?---------------------------->
+                    if monster.name == "PIGGY":
+                        if self.level.is_monster(x - dx, y - dy):
+                            continue  # monster should not run into another monster
+                        if x - dx == self.player.x and y - dy == self.player.y:
+                            self.status.extend(combat_round(monster, self.player, self.level))
+                            self.status.extend(combat_round(self.player, monster, self.level))
+                            self.count_monsters()
+                            continue  # monster should not run into player, it should fight him
+                        whereto = self.level.layout[(x - dx, y - dy)]
+                        if type(whereto).__name__ == "Wall":
+                            continue  # monster should not run into wall. waiting instead
+                        if len([t for t in self.level.traps if t.x == x - dx and t.y == y - dy]) > 0:
+                            continue  # monster should not run into trap. waiting instead
+                        if len([d for d in self.level.doors if d.x == x - dx and d.y == y - dy]) > 0:
+                            continue  # monster should not run into door. waiting instead
+#                   <-----------------------Piggy out------------------------------>
                     if self.level.is_monster(x + dx, y + dy):
                         continue  # monster should not run into another monster
                     if x+dx == self.player.x and y+dy == self.player.y:
@@ -1672,8 +1707,12 @@ class PygView(object):
                         continue     # monster should not run into trap. waiting instead
                     if len([d for d in self.level.doors if d.x == x + dx and d.y == y + dy]) > 0:
                         continue  # monster should not run into door. waiting instead
-                    monster.x += dx
-                    monster.y += dy
+                    if monster.name == "PIGGY":
+                        monster.x -=dx
+                        monster.y -=dy
+                    else:
+                        monster.x += dx
+                        monster.y += dy
 
 #                    whereto = self.level.layout[(x+dx, y+dy)]
 #                    if type(whereto).__name__ == "WallVOIDALTAR":
