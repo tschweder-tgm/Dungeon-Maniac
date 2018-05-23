@@ -554,7 +554,10 @@ class Floor(Block):
 class Wall(Block):
     def __init__(self):
         Block.__init__(self)
-        self.picture = random.choice((PygView.WALLB1, PygView.WALLB2, PygView.WALLB3, PygView.WALLB4))
+        self.picture = random.choice((PygView.WALL01, PygView.WALL02, PygView.WALL03, PygView.WALL04,
+                                      PygView.WALL05, PygView.WALL06, PygView.WALL07, PygView.WALL08,
+                                      PygView.WALL09, PygView.WALL10, PygView.WALL11, PygView.WALL12,
+                                      PygView.WALL13, PygView.WALL14, PygView.WALL15, PygView.WALL16))
         
 #class Wall2(Wall):
 #    def __init__(self):
@@ -1021,8 +1024,8 @@ class PygView(object):
                     quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_KP_ENTER:
-                        intro = False
                         save.load()
+                        intro = False
                     if event.key == pygame.K_x:
                         pygame.quit()
                         quit()
@@ -1113,10 +1116,22 @@ class PygView(object):
         PygView.FIREBALL3 = pygame.image.load(os.path.join("images", "FireBall3.png"))
         PygView.FIREBALL4 = pygame.image.load(os.path.join("images", "FireBall4.png"))
         # ---------- simple walls ----------
-        PygView.WALLB1 = pygame.image.load(os.path.join("images", "WALLBLUE1.png"))
-        PygView.WALLB2 = pygame.image.load(os.path.join("images", "WALLBLUE2.png"))
-        PygView.WALLB3 = pygame.image.load(os.path.join("images", "WALLBLUE3.png"))
-        PygView.WALLB4 = pygame.image.load(os.path.join("images", "WALLBLUE4.png"))
+        PygView.WALL01 = pygame.image.load(os.path.join("images", "WALL01.png"))
+        PygView.WALL02 = pygame.image.load(os.path.join("images", "WALL02.png"))
+        PygView.WALL03 = pygame.image.load(os.path.join("images", "WALL03.png"))
+        PygView.WALL04 = pygame.image.load(os.path.join("images", "WALL04.png"))
+        PygView.WALL05 = pygame.image.load(os.path.join("images", "WALL05.png"))
+        PygView.WALL06 = pygame.image.load(os.path.join("images", "WALL06.png"))
+        PygView.WALL07 = pygame.image.load(os.path.join("images", "WALL07.png"))
+        PygView.WALL08 = pygame.image.load(os.path.join("images", "WALL08.png"))
+        PygView.WALL09 = pygame.image.load(os.path.join("images", "WALL09.png"))
+        PygView.WALL10 = pygame.image.load(os.path.join("images", "WALL10.png"))
+        PygView.WALL11 = pygame.image.load(os.path.join("images", "WALL11.png"))
+        PygView.WALL12 = pygame.image.load(os.path.join("images", "WALL12.png"))
+        PygView.WALL13 = pygame.image.load(os.path.join("images", "WALL13.png"))
+        PygView.WALL14 = pygame.image.load(os.path.join("images", "WALL14.png"))
+        PygView.WALL15 = pygame.image.load(os.path.join("images", "WALL15.png"))
+        PygView.WALL16 = pygame.image.load(os.path.join("images", "WALL16.png"))
         # ---------- simple floors ----------
         PygView.FLOORB1 = pygame.image.load(os.path.join("images", "FLOOR1.png"))
         PygView.FLOORB2 = pygame.image.load(os.path.join("images", "FLOOR2.png"))
@@ -1423,6 +1438,7 @@ class PygView(object):
                         display_textlines(self.hilftextlines, self.screen)
                         self.firemode = False
                         continue
+                        self.firemode = False
                     elif event.key == pygame.K_PERIOD or event.key == pygame.K_RETURN:
                         self.firemode = False
                       
