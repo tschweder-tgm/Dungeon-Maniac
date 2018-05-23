@@ -100,7 +100,6 @@ def ask(question, screen,  image=None, x=-1, y=-1, center=True,  imagex=0, image
                 screen.blit(image, (PygView.width // 2 - image.get_rect().width // 2, 50))
         pygame.display.flip()
 
-
 def display_textlines(lines, screen, color=(0, 0, 255), image=None, center=True, imagex=0, imagey=0):
     """pygame version of printing several lines"""
     offset = 0
@@ -132,7 +131,6 @@ def display_textlines(lines, screen, color=(0, 0, 255), image=None, center=True,
             elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                 return
         pygame.display.flip()
-
 
 def combat_round(attacker, defender, level):
     """simulates one attack in a combat between monsters/player. Weapon and armor in the if/elif block 
@@ -234,7 +232,6 @@ def combat_round(attacker, defender, level):
     defender.hunger += 1
     return txt
 
-
 def load_sound(file):
     if not pygame.mixer:
         return NoSound()
@@ -245,7 +242,6 @@ def load_sound(file):
     except pygame.error:
         print('Warning, unable to load,', file)
     return NoSound()
-
 
 def load_music(file):
     if not pygame.mixer:
@@ -258,6 +254,52 @@ def load_music(file):
         print('Warning, unable to load,', file)
     return NoSound()
 
+def gamestart(screen):
+    while True:
+        screen.fill((167, 255, 158))
+        message_to_screen("Welcome to Dungeon Maniac", (0, 0, 0), screen, 70, PygView.width / 14, 100)
+        message_to_screen("Press ENTER to CONTINUE", (0, 0, 0), screen, 35, 235, 250)
+        message_to_screen("Press  E  for NEW GAME", (0, 0, 0), screen, 35, 250, 300)
+        message_to_screen("Press  ESC  for SETTINGS", (0, 0, 0), screen, 35, 235, 325)
+        message_to_screen("Press  X  for EXIT GAME", (200, 0, 0), screen, 35, 250, 375)
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+                return False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_KP_ENTER:
+                    return False
+                if event.key == pygame.K_x:
+                    pygame.quit()
+                    quit()
+                    return False
+                if event.key == pygame.K_e:
+                    return False
+                if event.key == pygame.K_ESCAPE:
+                    print(True)
+                    return True
+
+def settings(screen):
+    while True:
+        screen.fill((167, 255, 158))
+        message_to_screen("The Settings", (0, 0, 0), screen, 70, PygView.width / 14, 100)
+        message_to_screen("Press E to GO BACK", (0, 0, 0), screen, 35, 235, 250)
+        pygame.display.update()
+        for event1 in pygame.event.get():
+            if event1.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+                return
+            if event1.type == pygame.KEYDOWN:
+                if event1.key == pygame.K_x:
+                    pygame.quit()
+                    quit()
+                    return
+                if event1.key == pygame.K_e:
+                    return
+    return
 
 class NoSound(object):
     """dummy sound class so that the game works even if sound does not work"""
@@ -1032,33 +1074,6 @@ class PygView(object):
         # bestdepth = pygame.display.mode_ok(self.screenrect.size, winstyle, 32)
         # self.screen = pygame.display.set_mode(self.screenrect.size, winstyle, bestdepth)
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
-        intro = True
-        while intro:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_KP_ENTER:
-                        save.load()
-                        intro = False
-                    if event.key == pygame.K_x:
-                        pygame.quit()
-                        quit()
-                    if event.key == pygame.K_e:
-                        intro = False
-            self.screen.fill((167, 255, 158))
-            message_to_screen("Welcome to Dungeon Maniac",(0, 0, 0),self.screen,70,PygView.width/14,100)
-            message_to_screen("Press ENTER to CONTINUE", (0, 0, 0), self.screen, 35,235,250)
-            message_to_screen("Press  E  for NEW GAME", (0, 0, 0), self.screen, 35,250,300)
-            message_to_screen("Press  S  for SETTINGS", (0, 0, 0), self.screen, 35,253,325)
-            message_to_screen("Press  X  for EXIT GAME", (200, 0, 0), self.screen, 35,250,375)
-            #write("Welcome to Dungeon Maniac", (0, 0, 0), 24)
-            #write("Press ENTER to CONTINUE", (0, 0, 0), 24)
-            #write("Press   E   for NEW GAME", (0, 0, 0), 24)
-            #write("Press   S   for SETTINGS", (0, 0, 0), 24)
-            #write("Press   X   to EXIT GAME", (0, 0, 0), 24)
-            pygame.display.update()
         self.fps = 30  # frames per second
         pygame.display.set_caption("Dungeon Maniac")
         self.gui_height = 100  # height in pixel of bottom gui area
@@ -1796,4 +1811,14 @@ if __name__ == '__main__':
     levels = Level.check_levels(sourcefilenames)         # testing level for design errors
     # 800 x 600 pixel, Player start at x=1, y=1, in level 0 (the first level) with 0 xp, has level 1 and 50 hit points
     # PygView.game_intro()
-    PygView(levels, 800, 600, 1, 1, 0, 1, 50).run()
+    pyg = PygView(levels, 1024, 768, 1, 1, 0, 1, 50)
+
+    if gamestart(pyg.screen):
+        print("we are in here")
+        pyg.settingsCond = True
+
+        print(pyg.settingsCond)
+    if pyg.settingsCond:
+        settings(pyg.screen)
+
+    pyg.run()
