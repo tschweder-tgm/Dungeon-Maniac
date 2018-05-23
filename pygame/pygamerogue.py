@@ -548,7 +548,7 @@ class Block(object):
 class Floor(Block):
     def __init__(self):
         Block.__init__(self)
-        self.picture = random.choice((PygView.FLOORB1, PygView.FLOORB2))
+        self.picture = random.choice((PygView.FLOORB01, PygView.FLOORB02, PygView.FLOORB03, PygView.FLOORB04, PygView.FLOORB05, PygView.FLOORB06, PygView.FLOORB07, PygView.FLOORB08, PygView.FLOORB09, PygView.FLOORB10, PygView.FLOORB11))
 
 
 class Wall(Block):
@@ -1097,10 +1097,6 @@ class PygView(object):
         PygView.SHIELD = pygame.image.load(os.path.join("images", "shield.png"))
         PygView.BREAD = pygame.image.load(os.path.join("images", "bread.png"))
 
-
-
-
-
         PygView.KEY = PygView.FIGUREN.image_at((54, 1682, 32, 32), (0, 0, 0))
         PygView.SIGN = PygView.GUI.image_at((197, 0, 32, 32), (0, 0, 0))
         # ------- portraits -----
@@ -1118,8 +1114,19 @@ class PygView(object):
         PygView.WALLB3 = pygame.image.load(os.path.join("images", "WALLBLUE3.png"))
         PygView.WALLB4 = pygame.image.load(os.path.join("images", "WALLBLUE4.png"))
         # ---------- simple floors ----------
-        PygView.FLOORB1 = pygame.image.load(os.path.join("images", "FLOOR1.png"))
-        PygView.FLOORB2 = pygame.image.load(os.path.join("images", "FLOOR2.png"))
+        PygView.FLOORB01 = pygame.image.load(os.path.join("images", "FLOOR01.png"))
+        PygView.FLOORB02 = pygame.image.load(os.path.join("images", "FLOOR02.png"))
+        PygView.FLOORB03 = pygame.image.load(os.path.join("images", "FLOOR03.png"))
+        PygView.FLOORB04 = pygame.image.load(os.path.join("images", "FLOOR04.png"))
+        PygView.FLOORB05 = pygame.image.load(os.path.join("images", "FLOOR05.png"))
+        PygView.FLOORB06 = pygame.image.load(os.path.join("images", "FLOOR06.png"))
+        PygView.FLOORB07 = pygame.image.load(os.path.join("images", "FLOOR07.png"))
+        PygView.FLOORB08 = pygame.image.load(os.path.join("images", "FLOOR08.png"))
+        PygView.FLOORB09 = pygame.image.load(os.path.join("images", "FLOOR09.png"))
+        PygView.FLOORB10 = pygame.image.load(os.path.join("images", "FLOOR10.png"))
+        PygView.FLOORB11 = pygame.image.load(os.path.join("images", "FLOOR11.png"))
+
+
         # ---------- simple player ----------
         PygView.PLAYER1 = pygame.image.load(os.path.join("images", "player1.png"))
         PygView.ICEDRAGON1 = pygame.image.load(os.path.join("images", "ICEDRAGON.png"))
