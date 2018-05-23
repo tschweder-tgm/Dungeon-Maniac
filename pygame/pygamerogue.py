@@ -267,18 +267,17 @@ def gamestart(screen):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-                return False
+                return
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_KP_ENTER:
                     return False
                 if event.key == pygame.K_x:
                     pygame.quit()
                     quit()
-                    return False
+                    return
                 if event.key == pygame.K_e:
                     return False
                 if event.key == pygame.K_ESCAPE:
-                    print(True)
                     return True
 
 def settings(screen):
@@ -1812,12 +1811,12 @@ if __name__ == '__main__':
     # 800 x 600 pixel, Player start at x=1, y=1, in level 0 (the first level) with 0 xp, has level 1 and 50 hit points
     # PygView.game_intro()
     pyg = PygView(levels, 1024, 768, 1, 1, 0, 1, 50)
-
+    pyg.settingsCond = False
     if gamestart(pyg.screen):
         print("we are in here")
         pyg.settingsCond = True
-
         print(pyg.settingsCond)
+
     if pyg.settingsCond:
         settings(pyg.screen)
 
