@@ -28,7 +28,7 @@ mechanics, we still wanted to add something of our own.
 * Level and Stat-system
 
 ##### Implemented by JulianBurger(Fork from PyRogue)
-* Farys
+* Fairys
 * Fireball (Not working yet)
 * Monster AI reworked
 * Flying Objects added
@@ -39,7 +39,7 @@ mechanics, we still wanted to add something of our own.
 
 * Item-Variety (different icons)
 * Startmenu
-* Saves (Not fully working yet
+* Saves (Not fully working yet)
 
 #### To be added
 * AI-generated Item, Enemy, Stair and Wall spawns
