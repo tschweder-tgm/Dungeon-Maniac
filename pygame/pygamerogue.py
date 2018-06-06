@@ -257,11 +257,11 @@ def load_music(file):
 def gamestart(screen):
     while True:
         screen.fill((167, 255, 158))
-        message_to_screen("Welcome to Dungeon Maniac", (0, 0, 0), screen, 70, PygView.width / 14, 100)
-        message_to_screen("Press ENTER to CONTINUE", (0, 0, 0), screen, 35, 235, 250)
-        message_to_screen("Press  E  for NEW GAME", (0, 0, 0), screen, 35, 250, 300)
-        message_to_screen("Press  ESC  for SETTINGS", (0, 0, 0), screen, 35, 235, 325)
-        message_to_screen("Press  X  for EXIT GAME", (200, 0, 0), screen, 35, 250, 375)
+        message_to_screen("Welcome to Dungeon Maniac", (0, 0, 0), screen, 70, PygView.width / 6, 100)
+        message_to_screen("Press ENTER to CONTINUE", (0, 0, 0), screen, 35, 355, 300)
+        message_to_screen("Press  E  for NEW GAME", (0, 0, 0), screen, 35, 370, 350)
+        message_to_screen("Press  ESC  for SETTINGS", (0, 0, 0), screen, 35, 365, 375)
+        message_to_screen("Press  X  for EXIT GAME", (200, 0, 0), screen, 35, 370, 425)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
