@@ -37,16 +37,13 @@ mechanics, we still wanted to add something of our own.
 
 ##### Implemented by Us
 
-* Nothing yet
+* Item-Variety (different icons)
+* Startmenu
+* Saves (Not fully working yet
 
 #### To be added
 * AI-generated Item, Enemy, Stair and Wall spawns
 * Interactive character-portrait (Backpack, Armor, Weapons etc.)
-* Item-Variety (Different Weapon-and Armor types)
-* Startmenu with Character selection and saves
-* Bows and Magic (i.e. Elemental projectiles, Auras, etc)
-* Dodge chance
-* Animated character and enemies
 * Executable Game-file and installation (with Py2Exe)
 
 
